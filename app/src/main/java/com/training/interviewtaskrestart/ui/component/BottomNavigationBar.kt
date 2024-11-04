@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.training.interviewtaskrestart.ui.navigation.Screen
@@ -40,9 +43,7 @@ fun BottomNavigationBar(navController: NavController) {
 
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Black)
-            .padding(vertical = 8.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -61,6 +62,13 @@ fun BottomNavigationBar(navController: NavController) {
                         }
                     }
                     .padding(8.dp)
+                    .height(60.dp)
+                    .background(
+                        if (isSelected) Color.White else Color.Transparent,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .weight(1f), contentAlignment = Alignment.Center
+
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +83,7 @@ fun BottomNavigationBar(navController: NavController) {
                     Text(
                         text = screen.title,
                         color = if (isSelected) Cyan else Color.Gray,
-                        maxLines = 1,
+                        maxLines = 1, fontSize = 12.sp,
                         overflow = TextOverflow.Visible
                     )
                 }

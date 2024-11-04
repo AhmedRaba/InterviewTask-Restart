@@ -1,5 +1,6 @@
 package com.training.interviewtaskrestart.ui.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -13,7 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -33,23 +36,29 @@ fun Navigation() {
         mutableStateOf(true)
     }
     val triangleOffsets = listOf(-94, -62, 0, 20, -20)
-    val tooltipOffsets = listOf(-66, -20, 16, 15, -15)
+    val tooltipOffsets = listOf(-66, -20, 0, 15, -15)
     val instructions = listOf(
-        "Vous trouverez ici votre plan d'étude",
-        "Vous trouverez ici des partenaires d'étude et des personnes avec qui vous connecter",
-        "Voici les questions avec des réponses modèles",
-        "Vous pouvez filtrer pour voir un type exact de questions",
-        "Cliquez ici pour voir par catégories avec progression"
+        "You will find your study plan here.",
+        "You will find study partners and people to connect with here.",
+        "Here are the questions with model answers.",
+        "You can filter to see a specific type of questions.",
+        "Click here to see by categories with progression."
     )
+    val screens =
+        listOf(Screen.HomeScreen.route, Screen.ConnectorScreen.route, Screen.QuestionsScreen.route)
+
     val currentTriangleIndex = remember { mutableIntStateOf(0) }
     val currentTooltipIndex = remember { mutableIntStateOf(0) }
     val currentInstructionIndex = remember { mutableIntStateOf(0) }
+    val currentScreensIndex = remember { mutableIntStateOf(0) }
 
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar(navController)
-        }
-    ) { innerPadding ->
+
+
+    Scaffold(bottomBar = {
+        BottomNavigationBar(navController)
+    }) { innerPadding ->
+
+
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = navController,
@@ -64,37 +73,46 @@ fun Navigation() {
                 composable(route = Screen.ProfileScreen.route) { ProfileScreen() }
             }
 
-
-            Button(
-                onClick = {
-                    currentTriangleIndex.intValue =
-                        (currentTriangleIndex.intValue + 1) % triangleOffsets.size
-                    currentTooltipIndex.intValue =
-                        (currentTooltipIndex.intValue + 1) % tooltipOffsets.size
-                    currentInstructionIndex.intValue =
-                        (currentInstructionIndex.intValue + 1) % instructions.size
-
-
-                },
-                modifier = Modifier.align(Alignment.TopCenter)
-            ) {
-                Text("Move Tooltip")
-            }
-
             if (showTooltip.value) {
-                Tooltip(
-                    text = instructions[currentInstructionIndex.intValue],
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 80.dp)
-                        .offset(x = tooltipOffsets[currentTooltipIndex.intValue].dp),
-                    triangleOffset = triangleOffsets[currentTriangleIndex.intValue]
-                )
-            }
 
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.4f))
+                ) {
+
+                    Tooltip(
+                        text = instructions[currentInstructionIndex.intValue],
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 80.dp)
+                            .offset(x = tooltipOffsets[currentTooltipIndex.intValue].dp)
+                            .zIndex(2f),
+                        triangleOffset = triangleOffsets[currentTriangleIndex.intValue]
+                    )
+                    Button(
+                        onClick = {
+                            currentTriangleIndex.intValue =
+                                (currentTriangleIndex.intValue + 1) % triangleOffsets.size
+                            currentTooltipIndex.intValue =
+                                (currentTooltipIndex.intValue + 1) % tooltipOffsets.size
+                            currentInstructionIndex.intValue =
+                                (currentInstructionIndex.intValue + 1) % instructions.size
+                            currentScreensIndex.intValue =
+                                (currentScreensIndex.intValue + 1) % instructions.size
+
+                            navController.navigate(screens[currentScreensIndex.intValue])
+
+                        }, modifier = Modifier.align(Alignment.TopCenter)
+                    ) {
+                        Text("Move Tooltip")
+                    }
+                }
+            }
 
         }
 
     }
+
 
 }
