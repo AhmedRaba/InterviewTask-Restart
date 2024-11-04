@@ -28,7 +28,7 @@ import com.training.interviewtaskrestart.ui.navigation.Screen
 import com.training.interviewtaskrestart.ui.theme.Cyan
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(navController: NavController, showTutorial: Boolean) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -52,23 +52,30 @@ fun BottomNavigationBar(navController: NavController) {
 
             Box(
                 modifier = Modifier
-                    .clickable(interactionSource = null, indication = null) {
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                    .padding(8.dp)
-                    .height(60.dp)
-                    .background(
-                        if (isSelected) Color.White else Color.Transparent,
-                        shape = RoundedCornerShape(4.dp)
+                    .then(
+                        if (!showTutorial) {
+                            Modifier
+                                .clickable(
+                                    interactionSource = null,
+                                    indication = null
+                                ) {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                        } else Modifier
+                            .background(
+                                if (isSelected) Color.White else Color.Transparent,
+                                shape = RoundedCornerShape(4.dp)
+                            )
                     )
-                    .weight(1f), contentAlignment = Alignment.Center
-
+                    .height(60.dp)
+                    .weight(1f)
+                    .padding(8.dp), contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
