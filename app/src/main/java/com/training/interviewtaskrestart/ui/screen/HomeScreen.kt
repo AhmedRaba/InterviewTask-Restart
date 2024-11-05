@@ -8,7 +8,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun HomeScreen() {
-
     Text(modifier = Modifier.fillMaxWidth(), text = "Home Screen", fontSize = 30.sp)
 }
     

@@ -1,5 +1,6 @@
 package com.training.interviewtaskrestart.ui.component
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,14 +25,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.training.interviewtaskrestart.PreferencesManager
 import com.training.interviewtaskrestart.ui.navigation.Screen
 import com.training.interviewtaskrestart.ui.theme.Cyan
 
 @Composable
-fun BottomNavigationBar(navController: NavController, showTutorial: Boolean) {
+fun BottomNavigationBar(navController: NavController, showTutorial: Boolean, context: Context) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val preferencesManager = PreferencesManager(context)
+    val coverBottomNav = preferencesManager.coverBottomNav
 
     val items = listOf(
         Screen.HomeScreen,
@@ -43,6 +47,11 @@ fun BottomNavigationBar(navController: NavController, showTutorial: Boolean) {
 
     Row(
         modifier = Modifier
+            .then(
+                if (coverBottomNav) {
+                    Modifier.background(Color.Black.copy(alpha = 0.4f))
+                } else Modifier
+            )
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
@@ -52,7 +61,7 @@ fun BottomNavigationBar(navController: NavController, showTutorial: Boolean) {
 
             Box(
                 modifier = Modifier
-                    .then(
+                    .let {
                         if (!showTutorial) {
                             Modifier
                                 .clickable(
@@ -67,13 +76,17 @@ fun BottomNavigationBar(navController: NavController, showTutorial: Boolean) {
                                         restoreState = true
                                     }
                                 }
-                        } else Modifier
-                            .background(
-                                if (isSelected) Color.White else Color.Transparent,
-                                shape = RoundedCornerShape(4.dp)
+                        } else
+                            Modifier.then(
+                                if (coverBottomNav) {
+                                    Modifier
+                                } else Modifier.background(
+                                    if (isSelected) Color.White else Color.Transparent,
+                                    shape = RoundedCornerShape(4.dp)
+                                )
                             )
-                    )
-                    .height(60.dp)
+                    }
+                    .height(80.dp)
                     .weight(1f)
                     .padding(8.dp), contentAlignment = Alignment.Center
             ) {
