@@ -18,3 +18,10 @@ This app is built using the following technologies:
 - **Jetpack Compose**: Modern toolkit for building native UI in Android.
 - **SharedPreferences**: For storing user preferences and tutorial completion state.
 - **Navigation Component**: Manages app navigation and transitions between screens.
+
+
+
+
+
+https://github.com/user-attachments/assets/c84a25d9-0371-421e-b4c0-5fa6db252dda
+
